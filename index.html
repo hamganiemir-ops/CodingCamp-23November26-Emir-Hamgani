@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Track your daily spending with the Expense & Budget Visualizer." />
+  <title>Expense &amp; Budget Visualizer</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-theme="light">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="app-header">
+    <h1 class="app-title">💰 Budget Visualizer</h1>
+    <button
+      id="theme-toggle"
+      class="btn btn--icon"
+      aria-label="Toggle dark/light mode"
+      title="Toggle dark/light mode"
+    >🌙</button>
+  </header>
+
+  <!-- ===================== STORAGE WARNING BANNER ===================== -->
+  <div id="storage-warning" class="banner banner--warning hidden" role="alert">
+    ⚠️ Storage unavailable — data will not be saved between sessions.
+  </div>
+
+  <main class="app-main">
+
+    <!-- ============ SECTION 1: TOTAL BALANCE ============ -->
+    <section id="balance-section" class="card balance-card" aria-labelledby="balance-heading">
+      <h2 id="balance-heading" class="section-title">Total Spent</h2>
+      <p id="total-balance" class="balance-amount">$0.00</p>
+
+      <!-- Spending limit sub-section -->
+      <div class="limit-row">
+        <label for="spending-limit" class="limit-label">Spending Limit:</label>
+        <div class="limit-input-group">
+          <span class="currency-prefix">$</span>
+          <input
+            type="number"
+            id="spending-limit"
+            class="limit-input"
+            placeholder="No limit"
+            min="0"
+            step="0.01"
+            aria-label="Set spending limit"
+          />
+        </div>
+        <span id="limit-status" class="limit-status"></span>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 2: INPUT FORM ============ -->
+    <section id="form-section" class="card" aria-labelledby="form-heading">
+      <h2 id="form-heading" class="section-title">Add Transaction</h2>
+
+      <form id="transaction-form" novalidate>
+        <div class="form-group">
+          <label for="item-name" class="form-label">Item Name</label>
+          <input
+            type="text"
+            id="item-name"
+            class="form-input"
+            placeholder="e.g. Coffee"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="item-amount" class="form-label">Amount ($)</label>
+          <input
+            type="number"
+            id="item-amount"
+            class="form-input"
+            placeholder="0.00"
+            step="0.01"
+            min="0.01"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="item-category" class="form-label">Category</label>
+          <select id="item-category" class="form-select">
+            <option value="">-- Select Category --</option>
+            <option value="Food">🍔 Food</option>
+            <option value="Transport">🚌 Transport</option>
+            <option value="Fun">🎉 Fun</option>
+          </select>
+        </div>
+
+        <!-- Error message area -->
+        <div id="form-error" class="form-error" role="alert" aria-live="polite"></div>
+
+        <button type="submit" class="btn btn--primary btn--full">
+          ＋ Add Transaction
+        </button>
+      </form>
+    </section>
+
+    <!-- ============ SECTION 3: PIE CHART ============ -->
+    <section id="chart-section" class="card" aria-labelledby="chart-heading">
+      <h2 id="chart-heading" class="section-title">Spending by Category</h2>
+
+      <div class="chart-container">
+        <canvas id="spending-chart" aria-label="Pie chart of spending by category"></canvas>
+        <p id="empty-state" class="empty-state">
+          🧾 No transactions yet.<br />
+          <span class="empty-hint">Add your first expense above!</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 4: TRANSACTION LIST ============ -->
+    <section id="list-section" class="card" aria-labelledby="list-heading">
+      <div class="list-header">
+        <h2 id="list-heading" class="section-title">Transactions</h2>
+
+        <!-- Sort control -->
+        <div class="sort-control">
+          <label for="sort-select" class="sort-label">Sort:</label>
+          <select id="sort-select" class="form-select form-select--small" aria-label="Sort transactions">
+            <option value="default">Default</option>
+            <option value="amount-asc">Amount (Low → High)</option>
+            <option value="amount-desc">Amount (High → Low)</option>
+            <option value="category-alpha">Category (A–Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <ul id="transaction-list" class="transaction-list" aria-label="Transaction history"></ul>
+
+      <p id="list-empty" class="empty-state hidden">No transactions to show.</p>
+    </section>
+
+  </main>
+
+  <!-- Chart.js from CDN — loaded before script.js so the Chart class is available -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Application logic -->
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,620 @@
+﻿/* ============================================================
+   Expense & Budget Visualizer — css/style.css
+   Mobile-first, single stylesheet.
+   CSS custom properties drive light/dark theming.
+   ============================================================ */
+
+/* ---- Reset & Box Model ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   THEME: Custom Properties
+   Defaults = light mode (applied on :root).
+   Dark mode overrides on [data-theme="dark"].
+   ============================================================ */
+:root {
+  /* Surfaces */
+  --color-bg:         #f4f6f9;
+  --color-surface:    #ffffff;
+  --color-surface-2:  #f0f2f5;
+
+  /* Text */
+  --color-text:       #1a1d23;
+  --color-text-muted: #6b7280;
+
+  /* Accent / brand */
+  --color-accent:     #4f46e5;        /* indigo */
+  --color-accent-hover: #4338ca;
+
+  /* Semantic */
+  --color-success:    #10b981;
+  --color-danger:     #ef4444;
+  --color-warning-bg: #fff3cd;
+  --color-warning-text: #856404;
+
+  /* Over-limit highlight */
+  --color-over-limit:       #ef4444;
+  --color-over-limit-bg:    rgba(239, 68, 68, 0.08);
+  --color-over-limit-border: rgba(239, 68, 68, 0.4);
+
+  /* Category colours (also used by Chart.js in JS) */
+  --color-food:      #FF6384;
+  --color-transport: #36A2EB;
+  --color-fun:       #FFCE56;
+
+  /* Layout */
+  --radius:    12px;
+  --radius-sm: 8px;
+  --shadow:    0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* Transitions */
+  --transition: 0.15s ease;
+
+  /* Typography */
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="dark"] {
+  --color-bg:         #0f1117;
+  --color-surface:    #1a1d23;
+  --color-surface-2:  #22262f;
+
+  --color-text:       #e8eaed;
+  --color-text-muted: #9ca3af;
+
+  --color-accent:     #818cf8;
+  --color-accent-hover: #a5b4fc;
+
+  --color-success:    #34d399;
+  --color-danger:     #f87171;
+  --color-warning-bg: #2d2200;
+  --color-warning-text: #fbbf24;
+
+  --color-over-limit:       #f87171;
+  --color-over-limit-bg:    rgba(248, 113, 113, 0.1);
+  --color-over-limit-border: rgba(248, 113, 113, 0.4);
+
+  --shadow:    0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  transition: background-color var(--transition), color var(--transition);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-surface-2);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition), transform 0.08s ease, box-shadow var(--transition);
+  min-height: 44px;
+  min-width: 44px;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.btn--icon {
+  background-color: var(--color-surface-2);
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  width: 44px;
+  height: 44px;
+}
+
+.btn--icon:hover {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn--danger {
+  background-color: transparent;
+  color: var(--color-danger);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  min-height: 32px;
+  font-weight: 500;
+}
+
+.btn--danger:hover {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+.btn--full {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   BANNER (storage warning)
+   ============================================================ */
+.banner {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.banner--warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
+}
+
+/* ============================================================
+   MAIN LAYOUT — mobile first (single column)
+   ============================================================ */
+.app-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================================
+   CARD (shared section wrapper)
+   ============================================================ */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  transition: background-color var(--transition), box-shadow var(--transition);
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.9rem;
+}
+
+/* ============================================================
+   SECTION 1: BALANCE CARD
+   ============================================================ */
+.balance-card {
+  text-align: center;
+}
+
+.balance-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  transition: color var(--transition);
+}
+
+/* When total exceeds spending limit */
+.balance-amount.over-limit {
+  color: var(--color-over-limit);
+}
+
+/* Spending limit row */
+.limit-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.limit-label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.limit-input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.limit-input-group:focus-within {
+  border-color: var(--color-accent);
+}
+
+.currency-prefix {
+  padding: 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.limit-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-family: var(--font);
+  width: 100px;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  min-height: 44px;
+}
+
+/* Remove browser spin buttons */
+.limit-input::-webkit-inner-spin-button,
+.limit-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.limit-input[type=number] { -moz-appearance: textfield; }
+
+.limit-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-over-limit);
+  min-height: 1.2em;
+}
+
+/* ============================================================
+   SECTION 2: FORM
+   ============================================================ */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.form-input,
+.form-select {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  color: var(--color-text);
+  background-color: var(--color-surface-2);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  outline: none;
+  min-height: 44px;
+  transition: border-color var(--transition), background-color var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* Remove spin buttons from number inputs */
+.form-input[type=number]::-webkit-inner-spin-button,
+.form-input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.form-input[type=number] { -moz-appearance: textfield; }
+
+/* Error message */
+.form-error {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-danger);
+  min-height: 1.4em;
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+
+.form-error:not(:empty) {
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid var(--color-danger);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ============================================================
+   SECTION 3: CHART
+   ============================================================ */
+.chart-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+
+#spending-chart {
+  max-width: 280px;
+  max-height: 280px;
+  width: 100% !important;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  padding: 1rem;
+}
+
+.empty-hint {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* ============================================================
+   SECTION 4: TRANSACTION LIST
+   ============================================================ */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.list-header .section-title {
+  margin-bottom: 0;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sort-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.form-select--small {
+  padding: 0.4rem 2rem 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  min-height: 36px;
+}
+
+/* Transaction list */
+.transaction-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 2px; /* avoid scrollbar overlap */
+}
+
+/* Scrollbar styling */
+.transaction-list::-webkit-scrollbar {
+  width: 4px;
+}
+.transaction-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.transaction-list::-webkit-scrollbar-thumb {
+  background: var(--color-surface-2);
+  border-radius: 4px;
+}
+
+/* Individual transaction item */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background-color: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid transparent;
+  transition: border-color var(--transition), background-color var(--transition);
+  animation: slideIn 0.18s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Category accent border colours */
+.transaction-item[data-category="Food"]      { border-color: var(--color-food); }
+.transaction-item[data-category="Transport"] { border-color: var(--color-transport); }
+.transaction-item[data-category="Fun"]       { border-color: var(--color-fun); }
+
+/* Over-limit transaction highlight */
+.transaction-item.over-limit {
+  background-color: var(--color-over-limit-bg);
+  border-right: 2px solid var(--color-over-limit-border);
+}
+
+/* Category badge */
+.transaction-category {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.category-badge--Food      { background-color: var(--color-food); }
+.category-badge--Transport { background-color: var(--color-transport); color: #1a1d23; }
+.category-badge--Fun       { background-color: var(--color-fun); color: #1a1d23; }
+
+/* Item details */
+.transaction-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+/* Amount */
+.transaction-amount {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   RESPONSIVE: 768px breakpoint (desktop)
+   ============================================================ */
+@media (min-width: 768px) {
+  .app-header {
+    padding: 1rem 2rem;
+  }
+
+  .app-title {
+    font-size: 1.4rem;
+  }
+
+  .app-main {
+    padding: 1.5rem 2rem;
+    gap: 1.25rem;
+    /* Two-column grid: form + chart side by side */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "balance  balance"
+      "form     chart"
+      "list     list";
+  }
+
+  #balance-section { grid-area: balance; }
+  #form-section    { grid-area: form; }
+  #chart-section   { grid-area: chart; }
+  #list-section    { grid-area: list; }
+
+  .balance-amount {
+    font-size: 3rem;
+  }
+
+  .chart-container {
+    min-height: 260px;
+  }
+
+  #spending-chart {
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .transaction-list {
+    max-height: 500px;
+  }
+}
